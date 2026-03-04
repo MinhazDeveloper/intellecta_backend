@@ -13,5 +13,6 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 RUN composer install --no-dev --optimize-autoloader
 
 # Setup Nginx and Permissions
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/cache
+# RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/cache
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 CMD php artisan migrate --force && service nginx start && php-fpm
