@@ -1,6 +1,6 @@
 FROM php:8.2-fpm
 
-# ১. প্রয়োজনীয় ডিপেন্ডেন্সি ইন্সটল
+# ১. প্রয়োজনীয় ডিপেন্ডেন্সি ইন্সটল (PostgreSQL এর জন্য libpq-dev যোগ করা হয়েছে)
 RUN apt-get update && apt-get install -y \
     libpng-dev \
     libjpeg-dev \
@@ -8,9 +8,11 @@ RUN apt-get update && apt-get install -y \
     zip \
     git \
     unzip \
-    nginx
+    nginx \
+    libpq-dev 
 
-RUN docker-php-ext-install pdo_mysql gd
+# PostgreSQL এর জন্য pdo_pgsql ইন্সটল করা হয়েছে
+RUN docker-php-ext-install pdo_pgsql gd
 
 # ২. প্রোজেক্ট ফাইল কপি
 WORKDIR /var/www/html
@@ -43,5 +45,6 @@ RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cac
 # ৬. পোর্ট এক্সপোজ করা
 EXPOSE 80
 
-# ৭. কন্টেইনার স্টার্ট কমান্ড (Nginx-কে ফোরগ্রাউন্ডে রাখা হয়েছে)
+# ৭. কন্টেইনার স্টার্ট কমান্ড
+# Render-এ ডাটাবেস কানেকশন সেট হওয়ার পর মাইগ্রেশন রান হবে
 CMD php artisan migrate --force && php-fpm -D && nginx -g "daemon off;"
