@@ -14,11 +14,11 @@ use Illuminate\Support\Facades\Route;
 | API Routes
 |--------------------------------------------------------------------------
 */
-// Route::get('/test', function () {
-//     return response()->json([
-//         'message' => 'API route is working'
-//     ]);
-// });
+Route::get('/test', function () {
+    return response()->json([
+        'message' => 'API route is working'
+    ]);
+});
 
 // / Public Routes
 Route::post('/auth/register', [AuthController::class, 'register']);
