@@ -47,4 +47,4 @@ EXPOSE 80
 
 # ৭. কন্টেইনার স্টার্ট কমান্ড
 # Render-এ ডাটাবেস কানেকশন সেট হওয়ার পর মাইগ্রেশন রান হবে
-CMD php artisan migrate --force && php-fpm -D && nginx -g "daemon off;"
+CMD php artisan migrate --force && php artisan db:seed --force && php-fpm -D && nginx -g "daemon off;"
