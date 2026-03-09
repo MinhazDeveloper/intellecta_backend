@@ -38,27 +38,30 @@ Route::middleware('auth:sanctum')->group(function () {
     });
     // email verification notification
     Route::post('/email/verification-notification', [AuthController::class, 'sendVerificationEmail']);
+    //demo mode middleware
+    Route::middleware(['demo'])->group(function () {
+        // for admin
+        Route::middleware(['role:admin'])->prefix('admin')->group(function () {
+            // Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+            Route::get('/dashboard-stats', [AdminController::class, 'getStats']);
+            Route::get('/user/all', [AdminController::class, 'userAll'])->name('admin.userAll');
+            Route::post('/user/store', [AdminController::class, 'storeUser']);
+            Route::put('/user/update/{id}', [AdminController::class, 'updateUser']);
+            Route::delete('/user/delete/{id}', [AdminController::class, 'destroy']);
+            Route::get('/exams', [ExamController::class, 'getExamlist']);
+            Route::get('/exam-history', [AdminController::class, 'getAllSubmissions']);
 
-    // for admin
-    Route::middleware(['role:admin'])->prefix('admin')->group(function () {
-        // Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
-        Route::get('/dashboard-stats', [AdminController::class, 'getStats']);
-        Route::get('/user/all', [AdminController::class, 'userAll'])->name('admin.userAll');
-        Route::post('/user/store', [AdminController::class, 'storeUser']);
-        Route::put('/user/update/{id}', [AdminController::class, 'updateUser']);
-        Route::delete('/user/delete/{id}', [AdminController::class, 'destroy']);
-        Route::get('/exams', [ExamController::class, 'getExamlist']);
-        Route::get('/exam-history', [AdminController::class, 'getAllSubmissions']);
+        });
+        // for instructors
+        Route::middleware(['role:instructor'])->prefix('instructor')->group(function () {
+            Route::get('/dashboard', [InstructorController::class, 'dashboard'])->name('instructor.dashboard');
+            Route::get('/stats', [InstructorController::class, 'getStats']);
+            Route::apiResource('exams', ExamController::class);
+            Route::apiResource('questions', QuestionController::class);
 
+        });
     });
-    // for instructors
-    Route::middleware(['role:instructor'])->prefix('instructor')->group(function () {
-        Route::get('/dashboard', [InstructorController::class, 'dashboard'])->name('instructor.dashboard');
-        Route::get('/stats', [InstructorController::class, 'getStats']);
-        Route::apiResource('exams', ExamController::class);
-        Route::apiResource('questions', QuestionController::class);
 
-    });
     // for students
     Route::middleware(['role:student'])->prefix('student')->group(function () {
         Route::get('/dashboard', [StudentController::class, 'dashboard'])->name('student.dashboard');
@@ -69,5 +72,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('exam/submit', [ExamController::class, 'ExamSubmit']);
 
     });
+
+    
 
 });
