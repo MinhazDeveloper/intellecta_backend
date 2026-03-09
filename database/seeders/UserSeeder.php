@@ -15,27 +15,33 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         // Admin
-        User::create([
-            'name' => 'James',
-            'email' => 'james@intellecta.com',
-            'password' => Hash::make('james123'),
-            'role' => 'admin',
-        ]);
+        User::updateOrCreate(
+            ['email' => 'james@intellecta.com'], // সার্চ করার জন্য
+            [
+                'name' => 'James',
+                'password' => Hash::make('james123'),
+                'role' => 'admin',
+            ]
+        );
 
         // Instructor
-        User::create([
-            'name' => 'Emma',
-            'email' => 'emma@intellecta.com',
-            'password' => Hash::make('emma123'),
-            'role' => 'instructor',
-        ]);
+        User::updateOrCreate(
+            ['email' => 'emma@intellecta.com'], // সার্চ করার জন্য
+            [
+                'name' => 'Emma',
+                'password' => Hash::make('emma123'),
+                'role' => 'instructor',
+            ]
+        );
 
         // Student
-        User::create([
-            'name' => 'Kelly',
-            'email' => 'kelly@intellecta.com',
-            'password' => Hash::make('kelly123'),
-            'role' => 'student',
-        ]);
+        User::updateOrCreate(
+            ['email' => 'kelly@intellecta.com'], // সার্চ করার জন্য
+            [
+                'name' => 'Kelly',
+                'password' => Hash::make('kelly123'),
+                'role' => 'student',
+            ]
+        );
     }
 }
